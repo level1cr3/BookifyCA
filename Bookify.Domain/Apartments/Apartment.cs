@@ -2,31 +2,31 @@
 
 namespace Bookify.Domain.Apartments;
 
-public sealed class Apartment(Guid id) : Entity(id)
+public sealed class Apartment(Guid id,
+                              Name name,
+                              Description description,
+                              Address address,
+                              Money price,
+                              Money cleaningFee,
+                              List<Amenity> amenities) : Entity(id)
 {
-    public string Name { get; private set; }
+    public Name Name { get; private set; } = name;
 
-    public string Description { get; private set; }
+    public Description Description { get; private set; } = description;
 
-    public string Country { get; private set; }
+    public Address Address { get; private set; } = address;
 
-    public string State { get; private set; }
-    
-    public string ZipCode { get; private set; }
-    
-    public string City { get; private set; }
-    
-    public string Street { get; private set; }
-    
-    public decimal PriceAmount { get; private set; }
-    
-    public string PriceCurrency { get; private set; }
+    public Money Price { get; private set; } = price;
 
-    public decimal CleaningFeeAmount { get; private set; }
+    public Money CleaningFee { get; private set; } = cleaningFee;
 
-    public string CleaningFeeCurrency { get; private set; }
+    public List<Amenity> Amenities { get; private set; } = amenities;
 
     public DateTime? LastBookedOnUtc { get; private set; }
-
-    public List<Amenity> Amenities { get; set; } = [];
 }
+
+
+
+// The problem with strings or any premitive type which are part of your domain model is that they convey no meaning.
+// To solve premitive obsession and also improve the design of our domain model we are going to introduce value object to represent the address.
+// how we going to define the value objects. One that is really practical is using 'record type'.

@@ -1,0 +1,39 @@
+what is Entity ?
+it is a object that has a unique identifier id. and it contineous that means existence of this object is important throught
+the life of the application
+
+
+what is premitive obsession ?
+Primitive obsession is a term used in software development to describe the overuse of primitive data types (such as integers, strings, floats, etc.) 
+to represent concepts or entities within the domain of an application. This anti-pattern can lead to code that is less readable, more error-prone, 
+and harder to maintain. It typically indicates a failure to use more appropriate abstractions or custom types.
+
+Problems with Primitive Obsession:
+* Lack of Clarity: Using primitive types often leads to ambiguous and less expressive code.
+* Validation: Validation logic is often duplicated throughout the codebase instead of being encapsulated in a single place.
+* Business Logic: Business rules and constraints are scattered across the codebase rather than being encapsulated in domain-specific types.
+* Error-Prone: Increased risk of errors, such as passing parameters in the wrong order or using the wrong type of data.
+
+Solutions to Primitive Obsession:
+* Value Objects: Create custom types to represent domain concepts more accurately.
+* Encapsulation: Encapsulate related data and behavior within objects.
+* Type Safety: Use types to enforce constraints and business rules.
+
+Benefits of Avoiding Primitive Obsession:
+* Improved Readability: Code becomes more expressive and easier to understand.
+* Centralized Validation: Validation logic is encapsulated within value objects, reducing duplication.
+* Enhanced Maintainability: Code is easier to maintain and refactor.
+* Reduced Errors: Increased type safety reduces the likelihood of passing incorrect values.
+
+
+for apartment model changes.
+
+We initially began with an anemic domain model that used only primitive types. Now, we have developed a rich and expressive domain model, 
+where properties convey meaningful context and encapsulate accompanying behavior.
+
+
+what is anemic domain model ?
+
+An anemic domain model is a software design anti-pattern commonly observed in domain-driven design (DDD). 
+It refers to a domain model where business logic is absent from the domain objects, leaving them as mere data containers with little to no 
+behavior or logic encapsulated within them. Instead, the business logic is typically implemented in separate service classes.
