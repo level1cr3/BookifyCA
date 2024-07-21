@@ -37,3 +37,67 @@ what is anemic domain model ?
 An anemic domain model is a software design anti-pattern commonly observed in domain-driven design (DDD). 
 It refers to a domain model where business logic is absent from the domain objects, leaving them as mere data containers with little to no 
 behavior or logic encapsulated within them. Instead, the business logic is typically implemented in separate service classes.
+
+
+*****************************************************************************************************************************************
+
+### Benefit of Wrapping the Constructor Inside a Factory Method
+
+#### Why Use a Factory Method?
+
+1. **Hiding Constructor Details**:
+   - **Explanation**: Sometimes, a constructor might have complex details or logic that you don't want other parts of your code to see or use directly.
+   - **Simple Term**: It's like having a secret recipe for making a dish and not letting everyone know the exact steps, but just giving them the dish.
+
+2. **Encapsulation**:
+   - **Explanation**: Encapsulation is about keeping certain parts of your code hidden and protected, so they can't be misused.
+   - **Simple Term**: It's like putting a fence around your garden to keep it safe and controlled.
+
+3. **Introducing Side-Effects**:
+   - **Explanation**: Sometimes, you need to do extra things (side-effects) when creating an object, which don't belong in the constructor. 
+                      A factory method is a good place for these extra tasks.
+
+   - **Simple Term**: It's like adding special decorations to a cake after it's baked. The baking process (constructor) doesn't include the decorations, 
+                      but the final cake (object) does.
+
+#### Example: Domain Events
+
+- **Domain Events**: These are things that happen in your application that other parts of the application might need to know about. 
+                     For example, if a user registers, you might want to send a welcome email.
+
+By using a factory method, you can handle such events easily without cluttering the constructor.
+
+### Code Example
+
+```csharp
+public class User
+{
+    public string Name { get; private set; }
+    public string Email { get; private set; }
+
+    // Private constructor to hide it from outside
+    private User(string name, string email)
+    {
+        Name = name;
+        Email = email;
+    }
+
+    // Factory method
+    public static User CreateUser(string name, string email)
+    {
+        // Side-effect: Log user creation
+        Console.WriteLine("Creating user and logging this action.");
+
+        // Create the user
+        return new User(name, email);
+    }
+}
+```
+
+### In Simple Terms
+
+1. **Hide Details**: The constructor is private, so no one outside can use it directly.
+2. **Encapsulation**: By using the factory method, you keep the creation process controlled and safe.
+3. **Side-Effects**: You can do extra things (like logging) in the factory method, which you don't want in the constructor.
+
+This makes your code cleaner, safer, and more flexible.
