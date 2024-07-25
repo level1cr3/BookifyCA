@@ -101,3 +101,11 @@ public class User
 3. **Side-Effects**: You can do extra things (like logging) in the factory method, which you don't want in the constructor.
 
 This makes your code cleaner, safer, and more flexible.
+
+
+*************************************************************************************************************************************
+
+To persist the entity inside of database for that we will be using the repository pattern.
+Unitofwork and repository pattern are nessary of defining the rich domain model.
+In DDD we look repository as entityrepository meaning that my repository can only operate on my domain entities. This even be further imposed by using
+generic constrain which require which require the repository type to implement the entity base class.
