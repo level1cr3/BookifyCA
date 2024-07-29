@@ -23,7 +23,7 @@ public sealed class Apartment(Guid id,
 
     public List<Amenity> Amenities { get; private set; } = amenities;
 
-    public DateTime? LastBookedOnUtc { get; private set; }
+    public DateTime? LastBookedOnUtc { get; internal set; } // we can only set the value in domain project.
 }
 
 
