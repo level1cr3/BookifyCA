@@ -1,6 +1,5 @@
 ﻿using Bookify.Domain.Abstractions;
 using Bookify.Domain.Users.Events;
-using System;
 
 namespace Bookify.Domain.Users;
 
@@ -24,9 +23,9 @@ public sealed class User : Entity
     {
         var user = new User(Guid.NewGuid(), firstName, lastName, email);
 
-        user.RaiseDomainEvents(new UserCreatedDomainEvent(user.Id)); 
-      // now when we persist user in db. we are also going to publish user created domain event. someone can subscribe to this event and execute some behaviour asyncronously
-      // ex: sending user welcome message when they register to bookify system.
+        user.RaiseDomainEvents(new UserCreatedDomainEvent(user.Id));
+        // now when we persist user in db. we are also going to publish user created domain event. someone can subscribe to this event and execute some behaviour asyncronously
+        // ex: sending user welcome message when they register to bookify system.
 
         return user;
     }
