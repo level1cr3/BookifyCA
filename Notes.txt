@@ -109,3 +109,51 @@ To persist the entity inside of database for that we will be using the repositor
 Unitofwork and repository pattern are nessary of defining the rich domain model.
 In DDD we look repository as entityrepository meaning that my repository can only operate on my domain entities. This even be further imposed by using
 generic constrain which require which require the repository type to implement the entity base class.
+
+
+*************************************************************************************************************************************
+
+# Application Layer.
+>   It sits one level above the domain layer. It is allowed to reference the domain layer. It is still part of the  application core.
+    it doesn't have any external concerns of its own. However there are some trade of we can make in application layer particularly when it comes to querying the database.
+
+
+> the main concern of application laayer is implementing the use cases. use cases are the responsible for using rich domain model from domain layer.
+and orchastrating it to perform the business logic.
+
+    we will use CQRS pattern with mediatr to implement our use cases
+
+
+> we will solve cross cutting concerns in our application
+    * Loggin
+    * Validation
+
+
+> Exception
+
+> DI configuration.
+
+
+
+
+# CQRS : stands for command query responsibility segregation.
+        It splits the responsibility of writing the data from reading the data into seprate classes or objects
+
+
+Pros:
+    * Single responsibility principle : every command or query is responsible for only one thing
+    * interface segregation principle : this states that we should only depend on methods that we actually use.
+    in case of command and query handle we are only going to have one method handle.
+
+    * decorater pattern : we can use decorator pattern to handle the cross cutting concerns. with mediatr library we have access to pipeline behavior which 
+    are essentially a form of decorator pattern
+
+    * loose coupling. the command and command handler , query and query handler don't have to know about each other. mediatr is responsible for connecting them in 
+    runtime. consumer only needs to know about the command or query and how to publish it using the mediatr. everything else is taken care of somewhere else
+
+
+
+cons:
+    indirection : It is harder to reason about which class handles the request.
+
+
