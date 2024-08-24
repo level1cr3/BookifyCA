@@ -1,5 +1,6 @@
 ﻿using Bookify.Application.Behaviors;
 using Bookify.Domain.Bookings;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bookify.Application;
@@ -15,7 +16,14 @@ public static class DependencyInjection
             config.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly); // this assembly would be application project.
 
             config.AddOpenBehavior(typeof(LoggingBehavior<,>));
+
+            config.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
+
+        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly); // this is the reason why we installed the specific fluent library. instead of installing a generic one.
+
+        // here assebmly is 'application assembly aka my project name'. this will scan the assembly and register any validators as an IValidator instance which we are
+        // using in validation behaviour.
 
 
         services.AddTransient<PricingService>();
