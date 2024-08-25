@@ -157,3 +157,27 @@ cons:
     indirection : It is harder to reason about which class handles the request.
 
 
+********************************************************************************************************************************************************************
+
+# Infrastructure layer
+
+* EF core
+    > DbContext
+    > Entity Configurations
+    > Repositories
+
+* Optimistic concurrency
+
+* Publishing Domain events
+
+
+
+> It is one of the outer layer of clean architecture. It is responsible for any external facing concerns. 
+    Like databases, message brokers, Identity providers, storage provider and so on.
+
+> In some implementations of infrastructure layer. It might be split into multiple projects. 
+Ex : you could have one project related to databases,
+     another project related to message broker.
+     one more project related to identity and authentication
+
+    So depending on your needs you have lot of flexibility here
