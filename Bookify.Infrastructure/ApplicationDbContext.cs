@@ -1,6 +1,8 @@
-﻿using Bookify.Domain.Abstractions;
+﻿using Bookify.Application.Exceptions;
+using Bookify.Domain.Abstractions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Bookify.Infrastructure;
 internal sealed class ApplicationDbContext : DbContext, IUnitOfWork
@@ -24,11 +26,21 @@ internal sealed class ApplicationDbContext : DbContext, IUnitOfWork
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var result = await base.SaveChangesAsync(cancellationToken);
+        try
+        {
+            var result = await base.SaveChangesAsync(cancellationToken);
 
-        await PublishDomainEventsAsync(); // How to publish DomainEvent using the UnitOfWork pattern. Class implementing UnitOfWork pattern is ApplicationDbContext
+            await PublishDomainEventsAsync(); // How to publish DomainEvent using the UnitOfWork pattern. Class implementing UnitOfWork pattern is ApplicationDbContext
 
-        return result;
+            return result;
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            throw new ConcurrencyException("Concurrency exception occurred.", ex);
+            // the reason for creating a custom exception is so that we don't leak ef details into my application layer.
+            // we are abstracting ef error behind this custom exception. we are passing exception instance as an inner exception. so it is avilable for logging
+            // and further inspecting.
+        }
     }
 
     private async Task PublishDomainEventsAsync()

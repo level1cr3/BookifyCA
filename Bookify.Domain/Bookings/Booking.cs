@@ -75,6 +75,8 @@ public sealed class Booking : Entity
         booking.RaiseDomainEvents(new BookingReservedDomainEvent(booking.Id));
 
         apartment.LastBookedOnUtc = utcNow; // to set LastBookedOnUtc we can either expose a method or make ther sette internal only.
+        // this will trigger the update on the apartment table. for this specific row which we are making a booking for.
+        // so we will define rowVersion column in apartment entity which will help us with the optimistic concurrency.
 
         return booking;
     }

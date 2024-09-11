@@ -1,0 +1,103 @@
+Great questions! Let's break these down one by one:
+
+1. Race Condition:
+A race condition occurs when two or more operations compete to access or modify shared data simultaneously, and the final outcome depends on the relative timing of these operations.
+
+2. Concurrency Issue:
+A concurrency issue is a broader term that includes race conditions but also covers other problems that can occur when multiple operations are executed simultaneously. 
+
+3. Difference between Race Condition and Concurrency Issue:
+While they're related, they're not exactly the same:
+- All race conditions are concurrency issues, but not all concurrency issues are race conditions.
+- A concurrency issue might involve resource contention, deadlocks, or other synchronization problems that don't necessarily involve a "race" to modify data.
+
+4. Optimistic vs. Pessimistic Updates:
+
+
+
+
+
+# Optimistic Concurrency Control
+
+- Assumes conflicts are rare
+- Allows multiple users to access data simultaneously
+- Checks for conflicts only at commit time
+- If a conflict is detected, the operation is rolled back
+
+## Implementation:
+1. Read data and record its current state (e.g., version number)
+2. Perform operations
+3. Before committing, check if data has been modified since initial read
+4. If no changes, commit; if changes detected, handle conflict (e.g., retry or inform user)
+
+## Example (pseudo-code):
+```
+function updateRecord(id, newData):
+    record = database.get(id)
+    originalVersion = record.version
+    
+    // Perform updates
+    record.update(newData)
+    
+    if database.version(id) == originalVersion:
+        database.save(record)
+        return SUCCESS
+    else:
+        return CONFLICT
+```
+
+# Pessimistic Concurrency Control
+
+- Assumes conflicts are likely
+- Locks resources to prevent simultaneous access
+- Ensures data integrity but can reduce concurrency
+
+## Implementation:
+1. Acquire a lock on the data
+2. Perform operations
+3. Release the lock
+
+## Example (pseudo-code):
+```
+function updateRecord(id, newData):
+    try:
+        database.acquireLock(id)
+        record = database.get(id)
+        
+        // Perform updates
+        record.update(newData)
+        database.save(record)
+        
+        return SUCCESS
+    finally:
+        database.releaseLock(id)
+```
+
+# Choosing Between Optimistic and Pessimistic
+
+- Use optimistic when conflicts are rare and operations are short-lived
+- Use pessimistic when conflicts are frequent or data integrity is critical
+- Consider the trade-off between data consistency and system performance
+
+
+5. Shadow Property:
+A shadow property in the context of Entity Framework Core is a property that doesn't exist in your entity class but is mapped to a column in the database. It's called a "shadow" property because it exists in the EF Core model but not in the actual C# class.
+
+Key points about shadow properties:
+
+- They're useful when you want to track data in the database but don't want to expose it in your domain model.
+- Common uses include tracking creation or modification timestamps, or storing foreign keys without exposing them in the entity.
+- They can be accessed and manipulated through the `ChangeTracker` in EF Core.
+
+Example of defining a shadow property:
+
+```csharp
+modelBuilder.Entity<Blog>()
+    .Property<DateTime>("LastUpdated");
+```
+
+In this case, "LastUpdated" is a shadow property. It doesn't exist in the `Blog` class, but EF Core will track it and map it to a database column.
+
+Shadow properties can be particularly useful in implementing optimistic concurrency control, as they allow you to track version information without cluttering your domain model.
+
+Would you like me to elaborate on any of these concepts or provide more specific examples?

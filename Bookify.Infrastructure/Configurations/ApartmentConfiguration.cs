@@ -43,6 +43,11 @@ internal sealed class ApartmentConfiguration : IEntityTypeConfiguration<Apartmen
             .HasConversion(currency => currency.Code, code => Currency.FromCode(code));
         });
 
+
+        builder.Property<uint>("Version").IsRowVersion();
+        // we are defining a shadow property on apartment entity.
+        // postgress will use system column which is the xmin column and it holds the value of last updating transaction.
+
     }
 
 }
@@ -64,3 +69,13 @@ internal sealed class ApartmentConfiguration : IEntityTypeConfiguration<Apartmen
 
 // if this is a collection. we have support for calling 'ownsmany' method for mapping collection of value objects. But in that case the owned collection is 
 // going to be mapped into a seprate table.
+
+
+
+
+
+// 
+//Optimistic concurrency : is a mechanism tha relias on "having some column in the database acting as the version for that row".
+//Usually this is a database generated value and it is used when persisting changes to the database. To check if the version that is currently in database
+//is different from the one that we have in our application at the time when we loaded the entity. If those versions are not a match it means that somebody has 
+//changed this row in the database before we could and we throw a database concurrency exception.

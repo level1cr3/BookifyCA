@@ -1,13 +1,10 @@
 ﻿using Bookify.Application.Abstractions.Clock;
 using Bookify.Application.Abstractions.Messaging;
+using Bookify.Application.Exceptions;
 using Bookify.Domain.Abstractions;
 using Bookify.Domain.Apartments;
 using Bookify.Domain.Bookings;
 using Bookify.Domain.Users;
-using System.Diagnostics;
-using System.Resources;
-using System.Runtime.Intrinsics.X86;
-using System.Threading;
 
 namespace Bookify.Application.Bookings.ReserveBooking;
 internal sealed class ReserveBookingCommandHandler : ICommandHandler<ReserveBookingCommand, Guid>
@@ -61,22 +58,24 @@ internal sealed class ReserveBookingCommandHandler : ICommandHandler<ReserveBook
             return Result.Failure<Guid>(BookingErrors.Overlap);
         }
 
+        try
+        {
 
-        var booking = Booking.Reserve(
-            apartment,
-            user.Id,
-            duration,
-            _dateTimeProvider.UtcNow, // instead of using DateTime.UtcNow much better solution would be to use the abstraction to get the current time.
-            _pricingService);
+            var booking = Booking.Reserve(
+                apartment,
+                user.Id,
+                duration,
+                _dateTimeProvider.UtcNow,
+                _pricingService);
 
-        _bookingRepository.Add(booking);
-
-        // what happens if two users try to book same apartment at same time.
-        // how do we handle this concurrncy issue.
-        var isSaved = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
-
-
-        return isSaved ? booking.Id : Result.Failure<Guid>(BookingErrors.NotReserved);
+            _bookingRepository.Add(booking);
+            var isSaved = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
+            return isSaved ? booking.Id : Result.Failure<Guid>(BookingErrors.NotReserved);
+        }
+        catch (ConcurrencyException)
+        {
+            return Result.Failure<Guid>(BookingErrors.Overlap);
+        }
     }
 }
 
@@ -102,7 +101,7 @@ internal sealed class ReserveBookingCommandHandler : ICommandHandler<ReserveBook
 // Current problem is we could have 2 seprate transcations both trying to presist the booking
 // There are 2 ways to solve this.
 // 1. pessimistic Locking. 
-    // It means creating a transaction with some of the more constructive isolation level
+// It means creating a transaction with some of the more constructive isolation level
 // 2 optimistic locking
-    // It means you have a concurrency token present on your entities. The reason for using this is because it is for promance and it doesn't require locking a certain
-    // number of rows in the database for extended period of time
+// It means you have a concurrency token present on your entities. The reason for using this is because it is for promance and it doesn't require locking a certain
+// number of rows in the database for extended period of time
