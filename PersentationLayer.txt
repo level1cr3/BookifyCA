@@ -1,0 +1,21 @@
+# Persentation layer
+					: Acts as a entry point into our system and It is usually a RESTful API, grpc service or single page application. The main responsibility of 
+					persentation layer is to take request that are coming to our system package them up into commands or queries and send them using the Mediatr 
+					pattern to the application layer.
+
+					It acts as the composition root for our services. And this is where we are going to implement dependecy injection for all of our layers.
+
+> Web API, .NET 8
+
+> Controllers  : they will hold our endpoints.
+
+> Middleware   : to solve crosscutting concerns
+
+> DI Setup
+
+> Docker compose.
+
+
+
+# we will add project reference to application and infrastructure layer. So we can add the corrosponding dependency injection calls
+and configure services that are defined in these projects

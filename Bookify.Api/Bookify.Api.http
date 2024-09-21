@@ -1,0 +1,6 @@
+@Bookify.Api_HostAddress = https://localhost:32768
+
+GET {{Bookify.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

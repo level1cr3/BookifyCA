@@ -1,0 +1,50 @@
+========== Warming up containers for Bookify.Api ==========
+Starting up containers...
+docker build -f "C:\Users\user\source\repos\Bookify\Bookify.Api\Dockerfile" --force-rm -t bookifyapi:dev --target base  --build-arg "BUILD_CONFIGURATION=Debug" --build-arg "LAUNCHING_FROM_VS=true" --label "com.microsoft.created-by=visual-studio" --label "com.microsoft.visual-studio.project-name=Bookify.Api" "C:\Users\user\source\repos\Bookify" 
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.27kB 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for mcr.microsoft.com/dotnet/aspnet:8.0
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 464B 0.0s done
+#3 DONE 0.0s
+
+#4 [base 1/2] FROM mcr.microsoft.com/dotnet/aspnet:8.0@sha256:e935e3424c1043dad7f904240d767c76e0c32a3c9a8bf661c32eac6f29f5ea73
+#4 resolve mcr.microsoft.com/dotnet/aspnet:8.0@sha256:e935e3424c1043dad7f904240d767c76e0c32a3c9a8bf661c32eac6f29f5ea73
+#4 resolve mcr.microsoft.com/dotnet/aspnet:8.0@sha256:e935e3424c1043dad7f904240d767c76e0c32a3c9a8bf661c32eac6f29f5ea73 0.4s done
+#4 DONE 0.4s
+
+#4 [base 1/2] FROM mcr.microsoft.com/dotnet/aspnet:8.0@sha256:e935e3424c1043dad7f904240d767c76e0c32a3c9a8bf661c32eac6f29f5ea73
+#4 DONE 0.5s
+
+#5 [base 2/2] WORKDIR /app
+#5 DONE 0.5s
+
+#6 exporting to image
+#6 exporting layers 0.1s done
+#6 exporting manifest sha256:a3a0c800918a8a705b8a4a2656305a1b201cb27f8aef8b0114a6a643c01c16ce 0.0s done
+#6 exporting config sha256:1fda6f12772df7a9aa9b35fed80792c4149dae9423cf2290fcbfa9c2f161785d 0.0s done
+#6 exporting attestation manifest sha256:95647d3b1a98c15b5631b3baf7f76878b9766ea7f1d064e8519c7ecde91ba974 0.0s done
+#6 exporting manifest list sha256:9dfb712d6108e7ab43a138c75945d3604e6371aeceb429e0f4b85c750de0556c 0.0s done
+#6 naming to docker.io/library/bookifyapi:dev done
+#6 unpacking to docker.io/library/bookifyapi:dev 0.0s done
+#6 DONE 0.2s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/1dg8pudmx1h4z6cd460ba6tbp
+C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NonInteractive -NoProfile -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File "C:\Users\user\AppData\Local\Temp\GetVsDbg.ps1" -Version vs2017u5 -RuntimeID linux-x64 -InstallPath "C:\Users\user\vsdbg\vs2017u5"
+Info: Using vsdbg version '17.12.10904.2'
+Info: Using Runtime ID 'linux-x64'
+Info: C:\Users\user\vsdbg\vs2017u5 exists, deleting.
+Info: Successfully installed vsdbg at 'C:\Users\user\vsdbg\vs2017u5'
+C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NonInteractive -NoProfile -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File "C:\Users\user\AppData\Local\Temp\GetVsDbg.ps1" -Version vs2017u5 -RuntimeID linux-musl-x64 -InstallPath "C:\Users\user\vsdbg\vs2017u5\linux-musl-x64"
+Info: Using vsdbg version '17.12.10904.2'
+Info: Using Runtime ID 'linux-musl-x64'
+Info: Successfully installed vsdbg at 'C:\Users\user\vsdbg\vs2017u5\linux-musl-x64'
+docker run -dt -v "C:\Users\user\vsdbg\vs2017u5:/remote_debugger:rw" -v "C:\Users\user\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro" -v "C:\Users\user\AppData\Roaming\Microsoft\UserSecrets:/home/app/.microsoft/usersecrets:ro" -v "C:\Users\user\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro" -v "C:\Users\user\AppData\Roaming\ASP.NET\Https:/home/app/.aspnet/https:ro" -v "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\linux-x64\net8.0:/VSTools:ro" -v "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\HotReload:/HotReloadAgent:ro" -v "C:\Users\user\source\repos\Bookify\Bookify.Api:/app:rw" -v "C:\Users\user\source\repos\Bookify:/src/:rw" -v "C:\Users\user\.nuget\packages:/.nuget/fallbackpackages:rw" -e "ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS=true" -e "ASPNETCORE_ENVIRONMENT=Development" -e "DOTNET_USE_POLLING_FILE_WATCHER=1" -e "NUGET_PACKAGES=/.nuget/fallbackpackages" -e "NUGET_FALLBACK_PACKAGES=/.nuget/fallbackpackages" -P --name Bookify.Api --entrypoint dotnet bookifyapi:dev --roll-forward Major /VSTools/DistrolessHelper/DistrolessHelper.dll --wait 
+aa141afc3b7041e0e54c1ccc30bce0ffd5d9f3a482238723f8dae1011cc579c6
+Container started successfully.
