@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace Bookify.Infrastructure;
-internal sealed class ApplicationDbContext : DbContext, IUnitOfWork
+public sealed class ApplicationDbContext : DbContext, IUnitOfWork
 {
     private readonly IPublisher _publisher;
 

@@ -28,7 +28,9 @@ internal sealed class ApartmentConfiguration : IEntityTypeConfiguration<Apartmen
         // we will define simple conversion from value object to the premitive type in the database. 
         // and from premitive type back into the value object.
 
-
+        builder.Property(apartment => apartment.Description)
+            .HasMaxLength(2000)
+            .HasConversion(description => description.Value, value => new Description(value));
 
         builder.OwnsOne(apartment => apartment.Price, priceBuilder =>
         {

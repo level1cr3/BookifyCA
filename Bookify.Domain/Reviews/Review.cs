@@ -1,6 +1,7 @@
 ﻿using Bookify.Domain.Abstractions;
 using Bookify.Domain.Bookings;
 using Bookify.Domain.Reviews.Events;
+using System.Drawing;
 
 namespace Bookify.Domain.Reviews;
 
@@ -21,6 +22,11 @@ public sealed class Review : Entity
         Rating = rating;
         Comment = comment;
         CreatedOnUtc = createdOnUtc;
+    }
+
+    private Review()
+    {
+        
     }
 
     public Guid UserId { get; private set; }
