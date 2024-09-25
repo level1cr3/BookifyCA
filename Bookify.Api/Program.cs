@@ -29,6 +29,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 
     app.ApplyMigrations(); // only inside the development.
+    //app.SeedData(); // run only once.
 }
 
 app.UseHttpsRedirection();
