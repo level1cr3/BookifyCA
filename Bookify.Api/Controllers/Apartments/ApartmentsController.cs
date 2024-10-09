@@ -1,9 +1,11 @@
 ﻿using Bookify.Application.Apartments.SearchApartments;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookify.Api.Controllers.Apartments;
 
+[Authorize]
 [ApiController] // It is there to tell the dotnet runtime that this is suppose to be a api controller. It more light weight and requires less services and little bit more performant then MVC style controller.
 [Route("api/apartments")]//instead of controller template we are going to hardcode the route. just to make things explicit.
 public class ApartmentsController : ControllerBase

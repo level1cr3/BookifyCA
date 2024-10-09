@@ -1,0 +1,7 @@
+# we have the 2 clients
+
+1. bookify-auth-client : this is for generating JWT token.
+2. bookify-admin-client : this is for accessing admin api of the keycloak.
+
+
+> you need to learn how to setup keycloak. create the realm and setup clients.

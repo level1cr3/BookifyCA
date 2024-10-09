@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{0DD5A15B-5FC1-4858-B62A-0DB872539A2A}"
 	ProjectSection(SolutionItems) = preProject
 		DockerNotes.txt = DockerNotes.txt
+		KeycloakNotes.txt = KeycloakNotes.txt
 		Notes.txt = Notes.txt
 		PersentationLayer.txt = PersentationLayer.txt
 		Race_Condition.txt = Race_Condition.txt
