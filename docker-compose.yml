@@ -4,10 +4,12 @@ services:
     container_name: Bookify.Api
     build:
       context: .
-      dockerfile: Bookify.Api/Dockerfile
+      dockerfile: Bookify.Api/Dockerfile    
+    ports:
+        - 59121:8080
+        - 59122:8081
     depends_on:
         - bookify-db
-
   bookify-db:
     image: postgres:latest
     container_name: Bookify.Db

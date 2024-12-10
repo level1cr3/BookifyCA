@@ -29,6 +29,8 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         // this will give us a database garanteed constraint that email is going to be unique accross the users table.
         // we are making email as non clustered index.
 
+        builder.HasIndex(user => user.IdentityId).IsUnique(); // this is identityId will come from keyclock and we are making it unique.
+                                                              // to granty at db level it is unique
 
     }
 }
