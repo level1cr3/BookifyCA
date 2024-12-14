@@ -1,0 +1,17 @@
+# Authorization
+	> We used external identity provider (keycloak) for our authentication.
+	
+	> and authorization adds an additional layer of security on top of authentication.
+	
+	> authentication allows us to know who is the current user trying to access our system. 
+	
+	> and authorization allows us to determine what the current user cadn do.
+
+
+There are 3 types of authorization that we are going to see.
+
+1. Roles authorization.
+
+2. Permissions authorization.
+
+3. Resource-based authorization.
