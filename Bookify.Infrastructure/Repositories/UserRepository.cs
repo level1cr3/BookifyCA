@@ -6,6 +6,16 @@ internal sealed class UserRepository : Repository<User>, IUserRepository
     public UserRepository(ApplicationDbContext dbContext) : base(dbContext)
     {
     }
+
+    public override void Add(User user)
+    {
+        foreach (var role in user.Roles)
+        {
+            DbContext.Attach(role); // this will tell ef core any role present in our user obj. is already there in the db.
+        }
+
+        DbContext.Add(user);
+    }
 }
 
 

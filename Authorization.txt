@@ -10,8 +10,48 @@
 
 There are 3 types of authorization that we are going to see.
 
-1. Roles authorization.
+1. Roles authorization. : asp.net core has the native support for the role based authorization. we have to specify the authorize attribute. 
+and give role as the parameter. this roles params expects comma seprated roles that we wanna give.
+
+How role based authorization works ?
+> we use 'authorize' attribute to specify the role that we require the authenticated users to have. To be able to call the endpoint. Otherwise they are going to get the
+forbidden response. telling them they do not have the required access.
+
+Asp.net core uses a specific claim on the json webtoken. to determine if the user have this claim.
+
+We choose manage the role inside our own application. we are only using the keycloak for authentication.
+
+So we need to somehow add role claim to the jwt token. so it can be authorized in the api endpoint.
+
+Asp.net core has support for modifying users claims. we can do this using 'IClaimsTransformation' interface.
+
+
 
 2. Permissions authorization.
 
 3. Resource-based authorization.
+
+
+
+-- fixed keycloaack issue.
+
+The connection refused error typically occurs due to network isolation in Docker. Since you're running in a Docker Compose setup, 
+you need to use the service name instead of localhost. Update your Keycloak configuration to use the service name:
+
+"KeyCloak": {
+    "AdminUrl": "http://bookify-idp:8080/admin/realms/bookify/",
+    "TokenUrl": "http://bookify-idp:8080/realms/bookify/protocol/openid-connect/token",
+    "AdminClientId": "bookify-admin-client",
+    "AdminClientSecret": "UZDmbNxWmV4TlpaCRcju6pMRsyuV3er1",
+    "AuthClientId": "bookify-auth-client",
+    "AuthClientSecret": "3E3yvXaYppoYBF3Ir6DgtEzADKKzSurZ"
+}
+
+
+Key changes:
+
+Replace localhost:18080 with bookify-idp:8080
+Use the service name from docker-compose
+Use the container's internal port (8080)
+
+This resolves Docker network routing issues by using the internal Docker network service name.

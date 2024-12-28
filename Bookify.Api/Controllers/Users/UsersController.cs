@@ -22,6 +22,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("me")]
+    [Authorize(Roles = Roles.Registered)]
     public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
     {
         var query = new GetLoggedInUserQuery();

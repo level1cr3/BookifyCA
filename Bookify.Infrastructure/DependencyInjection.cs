@@ -7,6 +7,7 @@ using Bookify.Domain.Apartments;
 using Bookify.Domain.Bookings;
 using Bookify.Domain.Users;
 using Bookify.Infrastructure.Authentication;
+using Bookify.Infrastructure.Authorization;
 using Bookify.Infrastructure.Clock;
 using Bookify.Infrastructure.Data;
 using Bookify.Infrastructure.Email;
@@ -30,6 +31,8 @@ public static class DependencyInjection
         AddPersistence(services, configuration);
 
         AddAuthentication(services, configuration);
+
+        AddAuthorization(services);
 
         return services;
     }
@@ -95,5 +98,15 @@ public static class DependencyInjection
 
         services.AddScoped<IUserContext, UserContext>();
     }
+
+
+    private static void AddAuthorization(IServiceCollection services) 
+    {
+        services.AddScoped<AuthorizationService>();
+
+        services.AddTransient<Microsoft.AspNetCore.Authentication.IClaimsTransformation, CustomClaimsTransformation>();
+    }
+
+
 
 }
