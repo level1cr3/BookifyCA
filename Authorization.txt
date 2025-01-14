@@ -27,7 +27,34 @@ Asp.net core has support for modifying users claims. we can do this using 'IClai
 
 
 
-2. Permissions authorization.
+2. Permissions authorization. : is a way to apply the policy based authorization in asp.net core. In "Authorize"" attribute we can also pass in the argument name policy.
+we can use "Policy" property to define our custom policy.
+
+ex: we could give this. [Authorize(Policy = "users:read")]
+
+So users that authnticated have to spcify this policy to access this endpoint.
+we also need to add the required logic to verify this authorization policy.
+
+
+Why would we want to do this to begin with. : since we already have the role based authorization.
+
+> Because permission based or policy based authorization is much more fine grained. Because we can create custom permission for each use case or endpoint in 
+your api. You can also decide which role or which group of user will have access to particular permission.
+
+> It also very helpful if we can manage permission from the database.
+
+
+> an alternative approch would be to use. enums to define your roles and permissions. It might be better in terms of maintainace from code perspective.
+However we perfer to manage our role and permission from database. because now i can update the roles and permission. without making changes to our code.
+and redeploying the permission.
+
+
+> we want to associate it with particular role. so roles themselfs will have the collection of permissions. we are gonna create many to many role permission policy
+
+
+[Authorize(Roles = Roles.Registered)] if we want to we can both role based and permission based authorization. 
+But this doesn't really make sense because permissions are connected to the roles
+
 
 3. Resource-based authorization.
 

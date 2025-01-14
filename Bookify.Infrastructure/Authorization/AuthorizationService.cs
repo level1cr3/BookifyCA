@@ -19,7 +19,24 @@ internal sealed class AuthorizationService
         var userRoles = await _dbcontext.Set<User>().Where(user => user.IdentityId == identityId)
             .Select(user => new UserRolesResponse(user.Id, user.Roles.ToList())).FirstOrDefaultAsync();
 
-        return userRoles ?? throw new ApplicationException("User identity not found in database");
+        return userRoles ?? throw new ApplicationException("User roles not found.");
 
+    }
+
+    internal async Task<HashSet<string>> GetPermissionsForUserAsync(string identityId)
+    {
+        var permissions = await _dbcontext.Set<User>()
+            .Where(user => user.IdentityId == identityId)
+            .SelectMany(user => user.Roles.Select(role => role.Permissions))
+            .FirstOrDefaultAsync();
+
+        if (permissions is null)
+        {
+            throw new ApplicationException("Permissions not found.");
+        }
+
+        var permissionsSet = permissions.Select(p => p.Name).ToHashSet(); // to hashseet will get ride of any duplicate value.
+
+        return permissionsSet;
     }
 }

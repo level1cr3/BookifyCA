@@ -32,7 +32,7 @@ internal sealed class CustomClaimsTransformation : IClaimsTransformation
 
         var IdentityId = principal.GetIdentityId();
 
-        var userRoles = await authorizationService.GetRolesForUserAsync(IdentityId);
+        var userRoles = await authorizationService.GetRolesForUserAsync(IdentityId); // same issue here we are  requesting db for every authorization request we could improve this by introducing the cache
 
 
         // using pattern matching. to cast identity to claimsIdentity
