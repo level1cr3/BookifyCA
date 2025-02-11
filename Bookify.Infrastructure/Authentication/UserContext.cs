@@ -12,4 +12,6 @@ internal class UserContext : IUserContext
     }
 
     public string IdentityId => _contextAccessor.HttpContext?.User.GetIdentityId() ?? throw new ApplicationException("User context is unavailable");
+
+    public Guid UserId => _contextAccessor.HttpContext?.User.GetUserId() ?? throw new ApplicationException("User context is unavailable");
 }

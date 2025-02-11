@@ -56,7 +56,16 @@ and redeploying the permission.
 But this doesn't really make sense because permissions are connected to the roles
 
 
-3. Resource-based authorization.
+3. Resource-based authorization. : example > if i booked a hotel. Only i should be able to view my booking not anyone else. But currently there is no such 
+validation for it.
+
+Basically user who made the booking. Should be the only one who should be able to access the booking.
+
+// Granted somebody would need to know the exact identifier of the booking.
+
+> what we need to do inside the getbookingQueryHandler is ensure that userId of booking response matches the current logged in user.
+> You might be tempted to implement the genric solution for resourse based authorization. It is defenatily possible and even required in some-application
+but for our application this is enough.
 
 
 
