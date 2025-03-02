@@ -1,0 +1,12 @@
+1. structured logging : we will implement it using the serilog and seq sinks.
+
+2. Distributed caching : with redis
+
+3. Health checks
+
+4. API versioning
+
+5. Background Jobs
+	> we will use the 'outbox pattern' as a example where you might want to use the background jobs.
+
+6. Minimal API : As an alternative of using controller to expose your api endpoints.

@@ -1,13 +1,14 @@
-﻿using Bookify.Application.Abstractions.Messaging;
+﻿using Bookify.Domain.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Serilog.Context;
 
 namespace Bookify.Application.Behaviors;
-public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IBaseCommand
+public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IBaseRequest where TResponse : Result
 {
-    private readonly ILogger<TRequest> _logger;
+    private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
 
-    public LoggingBehavior(ILogger<TRequest> logger)
+    public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
     {
         _logger = logger;
     }
@@ -18,17 +19,30 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
 
         try
         {
-            _logger.LogInformation($"Executing command {name}");
+            _logger.LogInformation("Executing request {Request}", name);
 
             var result = await next();
 
-            _logger.LogInformation($"Command {name} processed successfully");
+            if (result.IsSuccess)
+            {
+                _logger.LogInformation("Request {Request} processed successfully", name);
+            }
+            else
+            {
+                //_logger.LogError("Request {Request} processed with {@Error}", name, result.Error); // to structure error as json object
+
+                // using logcontext to push errors in error property
+                using (LogContext.PushProperty("Error", result.Error, true))
+                {
+                    _logger.LogError("Request {Request} processed with error", name); 
+                }
+            }
 
             return result;
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, $"Command {name} processing failed");
+            _logger.LogError(exception, "Request {Request} processing failed", name);
 
             throw;
         }

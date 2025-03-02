@@ -20,6 +20,11 @@ public static class ApplicationBuilderExtensions
         app.UseMiddleware<ExceptionHandlingMiddleware>();
     }
 
+    public static void UserRequestContextLogging(this IApplicationBuilder app) 
+    {
+        app.UseMiddleware<RequestContextLoggingMiddleware>();    
+    }
+
 }
 
 // This method ApplyMigrations is going to be used only for local development process.
