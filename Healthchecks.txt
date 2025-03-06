@@ -1,0 +1,4 @@
+What is healthchek in asp.net core ?
+
+> It is an automated way to known what is the health of your system. This can include the API itself and also any external components you might be using.
+Ex : we are using postgreSql, redis cache and keyclock identity

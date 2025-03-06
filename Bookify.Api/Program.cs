@@ -1,13 +1,18 @@
 using Bookify.Api.Extensions;
 using Bookify.Application;
+using Bookify.Application.Abstractions.Data;
 using Bookify.Infrastructure;
+using Dapper;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Host.UseSerilog((context,configure) => configure.ReadFrom.Configuration(context.Configuration));
+builder.Host.UseSerilog((context, configure) => configure.ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -19,6 +24,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+builder.Services.AddHealthChecks().AddCheck<CustomSqlHealthCheck>("custom-sql"); // here we will configure the health check by calling addCheck.
 
 var app = builder.Build();
 
@@ -49,4 +55,33 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapHealthChecks("health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+}); // specify the endpoint where you want to expose the health
+
 app.Run();
+
+
+// to implement health check.
+public class CustomSqlHealthCheck(ISqlConnectionFactory sqlConnectionFactory) : IHealthCheck
+{
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        // in this code block we need to verify the status of our system.
+
+        try
+        {
+            using var connection = sqlConnectionFactory.CreateConnection();
+
+            await connection.ExecuteScalarAsync("SELECT 1");
+
+            return HealthCheckResult.Healthy();
+        }
+        catch (Exception e)
+        {
+            // we could also log it.
+            return HealthCheckResult.Unhealthy(exception: e);
+        }
+    }
+}

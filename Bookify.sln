@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{0DD5A15B
 		Authorization.txt = Authorization.txt
 		Distributed_caching.txt = Distributed_caching.txt
 		DockerNotes.txt = DockerNotes.txt
+		Healthchecks.txt = Healthchecks.txt
 		KeycloakNotes.txt = KeycloakNotes.txt
 		Notes.txt = Notes.txt
 		PersentationLayer.txt = PersentationLayer.txt
