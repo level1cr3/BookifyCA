@@ -1,0 +1,6 @@
+# Distributed caching with redis.
+
+> This is going to help us improve application performance.
+Because we will be reading data from redis. which is an in memory database. instead of relying on postgres which is a typical sql database.
+
+> It is also gonna help us reduce the load on our sql database instance.
