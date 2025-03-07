@@ -39,6 +39,8 @@ public static class DependencyInjection
 
         AddCaching(services, configuration);
 
+        AddHealthChecks(services, configuration);
+
         return services;
     }
 
@@ -126,5 +128,23 @@ public static class DependencyInjection
 
     }
 
+    private static void AddHealthChecks(IServiceCollection services, IConfiguration configuration)
+    {
+        // writing custom health check is not recommended. there are already many built-in health check libraries.
 
+        services.AddHealthChecks()
+            .AddNpgSql(configuration.GetConnectionString("Database")!)
+            .AddRedis(configuration.GetConnectionString("Cache")!)
+            .AddUrlGroup(new Uri(configuration["KeyCloak:BaseUrl"]!), HttpMethod.Get, "keycloak");
+
+        // use prebuilt health check library only use custom health check when there is no prebuilt library for your external service.
+
+        // why is it useful ?
+        // It is because we can setup monitoring support for on your health check endpoint. most cloud providers allow you to configure an endpoint
+        // that is going to be monitored every few secounds or minutes and as long as this endpoint returns 200 then nothing will happen but if 
+        // we get soemthing like 503 service not avaliable we could configure something like. For example if we figure out the db is not running and we 
+        // could restart it.
+        // we could dertermine that API is unavaliable and implement a failover senario where you could config the cloud provider to spin up
+        // the new application instance and terminate the old one. and we could also plugin some alerts so we could get email or slack notifications
+    }
 }
