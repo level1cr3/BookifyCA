@@ -1,0 +1,161 @@
+# API Versioning
+
+# What is API versioning ?
+
+	> API versioning is the processes of managing and tracking changes to your API. This also involes cummunicating changes about your API to
+	  your API consumers. "If there is one constant with API development is that you can't avoid changes to your API"
+
+# There are 3 types of API versioning
+
+	1 Query parameter : where you specify the API version as a query parameter in your URL.
+	2 Header : where you pass the API version using a custom request header.
+	3 URL : where the API version is part of the actual route. It is the most popular approach to API versioning
+
+
+# When should you version your API ?
+
+	> You should version the API as soon as you make the breaking change. 
+
+	
+# What constitutes a breaking change ?
+
+	> It should be an agrrement that you make as a team.
+
+	few examples are : 
+		> Any changes to the behaviour of your API constitues a breaking changes.
+		> Adding or Removing API endpoint is a breaking change.
+		> Chaning the request parameter without the default value is the breaking change. 
+		> Adding or removing the feilds to the API response is breaking change.
+
+		These API changes will break the API consumers and they are dangerous on the other hand some teams wouldn't consider adding a response feild
+		as a breaking change and this is why we should "Agree upon a standard as a team"
+
+
+
+# from claude ai
+
+## When to Version Your API
+
+Versioning immediately upon making a breaking change is indeed the best practice. This allows:
+- Existing clients to continue using the old version
+- New clients to adopt the new version
+- A smooth transition period
+
+## Breaking Changes in More Detail
+
+The team agreement aspect is crucial - having clear documentation about what constitutes a breaking change helps maintain consistency.
+
+### Behavior Changes
+When an API's behavior changes, even with the same inputs/outputs, it can break client applications that depend on specific functionality. Examples include:
+- Changing validation rules
+- Modifying how data is processed
+- Altering authentication mechanisms
+
+### Endpoint Changes
+Adding or removing endpoints affects API discoverability and functionality:
+- Removing endpoints directly breaks client applications
+- Even adding endpoints can break clients using dynamic discovery
+
+### Parameter Changes
+Changing request parameters without defaults is particularly disruptive because:
+- Clients send specific payloads expecting certain behavior
+- Adding required parameters breaks existing calls
+- Removing parameters can break clients that carefully constructed requests
+
+### Response Field Changes
+This is often overlooked but critical:
+- Client applications are built to expect and process specific response structures
+- Adding fields might seem harmless but can break strict typing in clients
+- Removing fields almost always breaks clients parsing the response
+
+## Additional Considerations
+
+Some other breaking changes worth noting:
+- Changing error response formats
+- Modifying HTTP status codes for specific scenarios
+- Changing rate limiting or throttling policies
+- Altering data types (even subtly, like int to long)
+
+
+# how change in behviour can break the API ?
+
+When we talk about "behavior" of an API, we're referring to how the API functions, processes information, and produces results - even if the inputs and outputs remain technically the same. Here are concrete examples of behavior changes that constitute breaking changes:
+
+### Example 1: Validation Logic Change
+**Before:**
+```
+POST /users
+{
+  "email": "user@example"
+}
+// Returns: 201 Created with user object
+```
+
+**After:**
+```
+POST /users
+{
+  "email": "user@example"
+}
+// Returns: 400 Bad Request - "Email must include valid domain"
+```
+The API now enforces stricter email validation, breaking existing clients that were sending previously acceptable emails.
+
+### Example 2: Sort Order Change
+**Before:**
+```
+GET /products?sort=price
+// Returns products sorted by price ascending (lowest first)
+```
+
+**After:**
+```
+GET /products?sort=price
+// Returns products sorted by price descending (highest first)
+```
+Client applications expecting a specific ordering will break when products suddenly appear in reverse order.
+
+### Example 3: Default Pagination Change
+**Before:**
+```
+GET /articles
+// Returns first 10 articles by default
+```
+
+**After:**
+```
+GET /articles
+// Returns first 25 articles by default
+```
+Client applications expecting exactly 10 items may break when processing the response.
+
+### Example 4: Search Algorithm Change
+**Before:**
+```
+GET /search?q=smartphone
+// Returns exact matches first
+```
+
+**After:**
+```
+GET /search?q=smartphone
+// Returns results based on popularity
+```
+Client applications that depend on consistent search results ordering will break.
+
+### Example 5: Authorization Behavior Change
+**Before:**
+```
+// Users can access their own records and their team's records
+GET /records/123
+```
+
+**After:**
+```
+// Users can only access their own records
+GET /records/123
+// Returns 403 Forbidden for team records
+```
+Applications expecting to access certain resources will break when permissions change.
+
+These examples show that even when the API endpoints, parameters, and response structure remain the same, changes to the underlying behavior can completely break client applications that rely on the specific way the API functions.

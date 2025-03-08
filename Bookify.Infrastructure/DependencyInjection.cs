@@ -1,4 +1,5 @@
-﻿using Bookify.Application.Abstractions.Authentication;
+﻿using Asp.Versioning;
+using Bookify.Application.Abstractions.Authentication;
 using Bookify.Application.Abstractions.Caching;
 using Bookify.Application.Abstractions.Clock;
 using Bookify.Application.Abstractions.Data;
@@ -40,6 +41,8 @@ public static class DependencyInjection
         AddCaching(services, configuration);
 
         AddHealthChecks(services, configuration);
+
+        AddApiVersioning(services);
 
         return services;
     }
@@ -147,4 +150,32 @@ public static class DependencyInjection
         // we could dertermine that API is unavaliable and implement a failover senario where you could config the cloud provider to spin up
         // the new application instance and terminate the old one. and we could also plugin some alerts so we could get email or slack notifications
     }
+
+
+    private static void AddApiVersioning(IServiceCollection services)
+    {
+        services
+            .AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = new ApiVersion(1);
+                options.ReportApiVersions = true;
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+
+                // here we could give query-string, header version if you want or even combine them
+                //options.ApiVersionReader = new HeaderApiVersionReader("X-Version-Id");
+                //options.ApiVersionReader = new QueryStringApiVersionReader();// always add api version query string.
+                //options.ApiVersionReader = ApiVersionReader.Combine(new HeaderApiVersionReader(), new QueryStringApiVersionReader());
+
+
+            })
+            .AddMvc()
+            .AddApiExplorer(options => 
+            {
+                options.GroupNameFormat = "'v'V"; // first lowercase matches v in the api route. second Capital V is version:apiVersion for number 1,2,3 ..
+                options.SubstituteApiVersionInUrl = true; // setting it true will use the default api verion. which is set to 1. in line options.DefaultApiVersion = new ApiVersion(1);.
+            });
+
+
+    }
+
 }

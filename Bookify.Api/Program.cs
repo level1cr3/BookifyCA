@@ -1,4 +1,5 @@
 using Bookify.Api.Extensions;
+using Bookify.Api.OpenApi;
 using Bookify.Application;
 using Bookify.Application.Abstractions.Data;
 using Bookify.Infrastructure;
@@ -24,6 +25,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
+
 var app = builder.Build();
 
 
@@ -33,7 +36,19 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+
+    // passing the delegate
+    app.UseSwaggerUI(options => 
+    {
+        var descriptions = app.DescribeApiVersions(); // using web application to call the  describeapiversion
+
+        foreach (var description in descriptions)
+        {
+            var url = $"/swagger/{description.GroupName}/swagger.json";
+            var name = description.GroupName.ToUpperInvariant();
+            options.SwaggerEndpoint(url, name);
+        }
+    });
 
     app.ApplyMigrations(); // only inside the development.
     //app.SeedData(); // run only once.

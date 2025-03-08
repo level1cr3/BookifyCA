@@ -1,4 +1,5 @@
-﻿using Bookify.Application.Users.GetLoggedInUser;
+﻿using Asp.Versioning;
+using Bookify.Application.Users.GetLoggedInUser;
 using Bookify.Application.Users.LogInUser;
 using Bookify.Application.Users.RegisterUser;
 using Bookify.Infrastructure.Authorization;
@@ -12,7 +13,10 @@ using System.Threading.Tasks;
 namespace Bookify.Api.Controllers.Users;
 
 [ApiController]
-[Route("api/user")]
+[ApiVersion(ApiVersions.V1)]
+//[ApiVersion(ApiVersions.V2)]
+//[ApiVersion(ApiVersions.V2, Deprecated = true)] // it allows me configure supported versions in this controller.
+[Route("api/v{version:apiVersion}/user")] // now this allows us to specify the api path using v1 or v2.
 public class UsersController : ControllerBase
 {
     private readonly ISender _sender;
@@ -32,6 +36,7 @@ public class UsersController : ControllerBase
 
         return Ok(result.Value);
     }
+
 
     [AllowAnonymous]
     [HttpPost("register")]
@@ -56,6 +61,7 @@ public class UsersController : ControllerBase
 
 
     [AllowAnonymous]
+    //[MapToApiVersion(ApiVersions.V1)]
     [HttpPost("login")]
     public async Task<IActionResult> LogIn(LogInUserRequest request, CancellationToken cancellationToken)
     {
@@ -71,6 +77,25 @@ public class UsersController : ControllerBase
         return Ok(result.Value);
 
     }
+
+
+    //[AllowAnonymous]
+    //[MapToApiVersion(ApiVersions.V2)]
+    //[HttpPost("login")]
+    //public async Task<IActionResult> LogInV2(LogInUserRequest request, CancellationToken cancellationToken)
+    //{
+    //    var command = new LogInUserCommand(request.Email, request.Password);
+
+    //    var result = await _sender.Send(command, cancellationToken);
+
+    //    if (result.IsFailure)
+    //    {
+    //        return Unauthorized(result.Error);
+    //    }
+
+    //    return Ok(result.Value);
+
+    //}
 
 
 }
