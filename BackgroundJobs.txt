@@ -1,0 +1,30 @@
+# We will use the Outbox pattern for background job.
+
+# What is the Outbox pattern ? and what problem it is trying to solve ?
+	> Distributed systems are inherently unreliable. And If we think about it even a system containing single API and a database can be 
+	considered a distributed system.
+	> Whenever your database is down so is your application because they are tighly coupled. and This becomes even more complicated when you are
+	working in the microservices enviroment. and you need to communicated between the multiple services.
+
+# so how does outbox pattern help us improve the reliablity of our system ?
+	> Instead of coupling your business transaction. which in this case could be registring the user and communicating with any external services.
+	  We can process the side-effects of the business transaction in the background.
+
+
+example :
+	> An Api request hit the Api endpoint. to register the new user in the system.
+	> inside of this transaction we will write a new record into the users table in our database.
+	  and we are also going to write a record into the outbox table. which is just another table in the database.
+
+	> The row that we add in the outbox table can contain the information that you think is nessary. The implementation that i like to use 
+	is to raise the domainEvent and then convert them into the outbox messages
+
+	> The we will introduce another component to the system which is going to be the worker process. in another words it is a backgroud job.
+	which is going to pull the outbox for any messages that haven't benn processed.
+
+	ex : we will read the domain event from the outbox and we are going to somehow publish this domain event. So that it is processed anycronously
+
+	we have external component which is message bus where the messages would be published.
+
+	> If your are just using domainEvent. We could easily publish them using the mediatr. and then in the mediatr handlers we could decide
+	if we need to publish the integration events to the 'message bus' instance

@@ -14,6 +14,7 @@ using Bookify.Infrastructure.Caching;
 using Bookify.Infrastructure.Clock;
 using Bookify.Infrastructure.Data;
 using Bookify.Infrastructure.Email;
+using Bookify.Infrastructure.Outbox;
 using Bookify.Infrastructure.Repositories;
 using Dapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,6 +23,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Quartz;
 
 namespace Bookify.Infrastructure;
 public static class DependencyInjection
@@ -43,6 +45,8 @@ public static class DependencyInjection
         AddHealthChecks(services, configuration);
 
         AddApiVersioning(services);
+
+        AddBackgroundJobs(services, configuration);
 
         return services;
     }
@@ -169,7 +173,7 @@ public static class DependencyInjection
 
             })
             .AddMvc()
-            .AddApiExplorer(options => 
+            .AddApiExplorer(options =>
             {
                 options.GroupNameFormat = "'v'V"; // first lowercase matches v in the api route. second Capital V is version:apiVersion for number 1,2,3 ..
                 options.SubstituteApiVersionInUrl = true; // setting it true will use the default api verion. which is set to 1. in line options.DefaultApiVersion = new ApiVersion(1);.
@@ -177,5 +181,21 @@ public static class DependencyInjection
 
 
     }
+
+
+    private static void AddBackgroundJobs(IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<OutboxOptions>(configuration.GetSection("Outbox"));
+
+        services.AddQuartz();
+        services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
+
+        //If your Quartz jobs perform critical operations(like processing payments, writing to databases, or finishing file operations),
+        //you typically want them to complete properly.
+        //Setting this to true helps prevent data corruption or incomplete processing that could occur if jobs are abruptly terminated.
+
+        services.ConfigureOptions<ProcessOutboxMessagesJobSetup>();
+    }
+
 
 }

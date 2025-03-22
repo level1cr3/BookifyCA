@@ -43,6 +43,10 @@ internal sealed class BookingReservedDomainEventHandler : INotificationHandler<B
             user.Email,
             "Booking Reserved!",
             "You have 10 minutes to confirm this booking.");
+
+        // Issue is here when we call a email service which is an external service. which we use to send the emails
+        // If this service is unreliable or could potentially fail then the domainEvent handler is also going to fail.
+        // This could be any kind of external service. example : message broker, storage service, payment service and so on..
     }
 }
 

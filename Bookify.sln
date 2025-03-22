@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{0DD5A15B
 		AdvanceTopics.txt = AdvanceTopics.txt
 		APIVersioning.txt = APIVersioning.txt
 		Authorization.txt = Authorization.txt
+		BackgroundJobs.txt = BackgroundJobs.txt
 		Distributed_caching.txt = Distributed_caching.txt
 		DockerNotes.txt = DockerNotes.txt
 		Healthchecks.txt = Healthchecks.txt
