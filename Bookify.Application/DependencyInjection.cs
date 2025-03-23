@@ -17,9 +17,10 @@ public static class DependencyInjection
 
             config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 
+            config.AddOpenBehavior(typeof(QueryCachingBehavior<,>));
+
             config.AddOpenBehavior(typeof(ValidationBehavior<,>));
 
-            config.AddOpenBehavior(typeof(QueryCachingBehavior<,>));
         });
 
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly); // this is the reason why we installed the specific fluent library. instead of installing a generic one.
