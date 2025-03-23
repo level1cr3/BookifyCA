@@ -1,4 +1,5 @@
-﻿using Bookify.Api.Middleware;
+﻿using Bookify.Api.Endpoints.Bookings;
+using Bookify.Api.Middleware;
 using Bookify.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,19 @@ public static class ApplicationBuilderExtensions
     {
         app.UseMiddleware<RequestContextLoggingMiddleware>();    
     }
+
+
+    //public static void MapEndpoints(this WebApplication app) 
+    //{
+    //    var apiVersionSet = app.NewApiVersionSet().HasApiVersion(new Asp.Versioning.ApiVersion(1)).ReportApiVersions().Build();
+
+    //    var routeGroupBuilder = app.MapGroup("api/v{version:apiVersion}").WithApiVersionSet(apiVersionSet);// we can add prefix for all endpoints created inside this group.
+    //                                                                                                       // we could also make call to require authentication to make all enpoints require authentication.
+
+    //    routeGroupBuilder.MapBookingEnpoints();
+
+    //}
+
 
 }
 

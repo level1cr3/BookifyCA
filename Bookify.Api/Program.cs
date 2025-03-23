@@ -2,12 +2,9 @@ using Bookify.Api.Endpoints.Bookings;
 using Bookify.Api.Extensions;
 using Bookify.Api.OpenApi;
 using Bookify.Application;
-using Bookify.Application.Abstractions.Data;
 using Bookify.Infrastructure;
-using Dapper;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,7 +36,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
 
     // passing the delegate
-    app.UseSwaggerUI(options => 
+    app.UseSwaggerUI(options =>
     {
         var descriptions = app.DescribeApiVersions(); // using web application to call the  describeapiversion
 
@@ -69,7 +66,16 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapBookingEnpoints();
+//app.MapEndpoints(); // could create extensioin method for including all the endpoints.
+
+
+var apiVersionSet = app.NewApiVersionSet().HasApiVersion(new Asp.Versioning.ApiVersion(1)).ReportApiVersions().Build();
+
+var routeGroupBuilder = app.MapGroup("api/v{version:apiVersion}").WithApiVersionSet(apiVersionSet);// we can add prefix for all endpoints created inside this group.
+// we could also make call to require authentication to make all enpoints require authentication.
+
+routeGroupBuilder.MapBookingEnpoints();
+
 
 app.MapHealthChecks("health", new HealthCheckOptions
 {

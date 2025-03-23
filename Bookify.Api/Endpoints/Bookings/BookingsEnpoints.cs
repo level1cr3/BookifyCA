@@ -1,7 +1,6 @@
 ﻿using Bookify.Application.Bookings.GetBooking;
 using Bookify.Application.Bookings.ReserveBooking;
 using MediatR;
-using System.Runtime.CompilerServices;
 
 namespace Bookify.Api.Endpoints.Bookings;
 
@@ -9,14 +8,9 @@ public static class BookingsEnpoints
 {
     public static IEndpointRouteBuilder MapBookingEnpoints(this IEndpointRouteBuilder builder)
     {
-        //builder.MapGet("api/v{version:apiVersion}/minimalBookings/{id}", GetBooking).RequireAuthorization().WithName(nameof(GetBooking)).HasApiVersion(1); // to map to specific endpoint version
+        builder.MapGet("minimalBookings/{id}", GetBooking).WithName(nameof(GetBooking));
 
-
-        var apiVersionset = builder.NewApiVersionSet().HasApiVersion(new Asp.Versioning.ApiVersion(1)).ReportApiVersions().Build();
-
-        builder.MapGet("api/v{version:apiVersion}/minimalBookings/{id}", GetBooking).RequireAuthorization().WithName(nameof(GetBooking)).WithApiVersionSet(apiVersionset);
-
-        builder.MapPost("api/v{version:apiVersion}/minimalBookings", ReserveBooking).RequireAuthorization().WithApiVersionSet(apiVersionset);
+        builder.MapPost("minimalBookings", ReserveBooking).RequireAuthorization();
 
         return builder;
     }
